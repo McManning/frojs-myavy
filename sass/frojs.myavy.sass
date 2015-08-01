@@ -1,0 +1,94 @@
+
+$highlight-color: #673ab7
+$greentext-color: #789922
+$font-family: 'Arial'
+
+$primary-color: blue
+
+/*** Buttons ***/
+$button-bg-color-disabled: #DFDFDF !default
+$button-color: $primary-color !default
+$button-color-disabled: #9F9F9F !default
+$button-color-flat: #343434 !default
+$button-color-raised: #FFF !default
+$button-floating-size: 37px !default
+$button-height: 36px !default
+$button-font-size-shared: 1.3rem !default
+$button-large-icon-font-size: 1.6rem !default
+$button-line-height: 36px !default
+
+/*** Tabs ***/
+$tabs-underline-color: $primary-color !default
+$tabs-text-color: $primary-color !default
+$tabs-bg-color: #fff !default
+
+// Useful mixins from Materialize
+@import "prefixer"
+
+
+.myavy
+    @import "globals"
+        
+    .close
+        font-size: 2em
+        position: absolute
+        right: 0.25em
+        top: 0
+
+    a
+        text-decoration: none
+
+    position: absolute
+    width: 400px
+    font-family: $font-family
+    background: #FFF
+    
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.2)
+    border: none
+    border-radius: 3px
+
+    margin: 20px
+    padding: 1.5em
+
+    @import "form"
+    @import "buttons"
+
+    .hidden
+        display: none !important
+
+    .page
+        padding: 1em
+
+        button[type=submit]
+            width: 100%
+
+    ul.tabs
+        list-style-type: none
+        white-space: nowrap
+        margin: 0
+        padding: 0
+        text-align: center
+
+    li.tab
+        display: inline-block
+        text-transform: uppercase
+        margin: 0 0.5em
+        padding: 0.5em 0
+        @include transition(.2s ease)
+
+        &.active
+            border-bottom: 1px solid red
+            box-shadow: 0 1px 0 0 red
+            
+    li.tab a
+        color: green
+        text-decoration: none
+        padding: 0.5em
+
+    li.tab a:hover
+        color: red
+
+    li.tab.active
+        border-bottom: 1px solid red
+
+

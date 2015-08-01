@@ -1,0 +1,8 @@
+*.diff
+*.patch
+.DS_Store
+.bower.json
+.sass-cache
+/node_modules
+/nocommit
+/dist

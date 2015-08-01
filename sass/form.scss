@@ -1,0 +1,194 @@
+/* Remove Focus Boxes */
+select:focus {
+  outline: 1px solid lighten($primary-color, 47%);
+}
+
+label {
+  font-size: .8rem;
+  color: #CCC;
+}
+
+/***************************
+   Text Inputs + Textarea
+****************************/
+
+// Style Placeholders
+::-webkit-input-placeholder {
+   color: #CCC;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   color: #CCC;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   color: #CCC;
+}
+
+:-ms-input-placeholder {
+   color: #CCC;
+}
+
+// Text inputs
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=url],
+input[type=time],
+input[type=date],
+input[type=datetime-local],
+input[type=tel],
+input[type=number],
+input[type=search],
+textarea.materialize-textarea {
+
+  // General Styles
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #CCC;
+  border-radius: 0;
+  outline: none;
+  height: 36px;
+  width: 100%;
+
+  font-size: 1rem;
+  margin: 0 0 15px 0;
+  padding: 0;
+  box-shadow: none;
+  @include box-sizing(content-box);
+  transition: all .3s;
+
+  // Disabled input style
+  &:disabled, &[readonly="readonly"] {
+    color: grey;
+    border-bottom: 1px dotted grey;
+  }
+  // Disabled label style
+  &:disabled+label, &[readonly="readonly"]+label {
+    color: grey;
+  }
+  // Focused input style
+  &:focus:not([readonly]) {
+    border-bottom: 1px solid $primary-color;
+    box-shadow: 0 1px 0 0 $primary-color;
+  }
+  // Focused label style
+  &:focus:not([readonly])+label {
+    color: #CCC;
+  }
+  
+  // Valid Input Style
+  &.valid,
+  &:focus.valid {
+    border-bottom: 1px solid green;
+    box-shadow: 0 1px 0 0 green;
+  }
+  // Custom Success Message
+  &.valid + label:after,
+  &:focus.valid + label:after {
+    content: attr(data-success);
+    color: green;
+    opacity: 1;
+  }
+  // Invalid Input Style
+  &.invalid,
+  &:focus.invalid {
+    border-bottom: 1px solid red;
+    box-shadow: 0 1px 0 0 red;
+  }
+  // Custom Error message
+  &.invalid + label:after,
+  &:focus.invalid + label:after {
+    content: attr(data-error);
+    color: red;
+    opacity: 1;
+  }
+
+  // Form Message Shared Styles
+  & + label:after {
+    display: block;
+    content: "";
+    position: absolute;
+    top: 65px;
+    opacity: 0;
+    transition: .2s opacity ease-out, .2s color ease-out;
+  }
+}
+
+// Styling for input field wrapper
+.input-field {
+  position: relative;
+  margin-top: 1rem;
+
+  label {
+    color: #CCC;
+    position: absolute;
+    top: 0.8rem;
+    left: 1.5rem / 2;
+    font-size: 1rem;
+    cursor: text;
+    @include transition(.2s ease-out);
+  }
+  label.active {
+    font-size: 0.8rem;
+    @include transform(translateY(-140%));
+  }
+
+  // Prefix Icons
+  .prefix {
+    position: absolute;
+    width: 36px;
+    font-size: 2rem;
+    @include transition(color .2s);
+
+    &.active { color: $primary-color; }
+  }
+  .prefix ~ input,
+  .prefix ~ textarea {
+    margin-left: 36px;
+    width: 92%;
+    width: calc(100% - 36px);
+  }
+  .prefix ~ textarea { padding-top: .8rem; }
+  .prefix ~ label { margin-left: 36px; }
+}
+
+/*********************
+      File Input
+**********************/
+.file-field {
+  position: relative;
+
+  .file-path-wrapper {
+    overflow: hidden;
+    padding-left: 10px;
+  }
+  input.file-path { width: 100%; }
+
+  .btn {
+    float: left;
+    height: 36px;
+    line-height: 36px;
+  }
+
+  span {
+    cursor: pointer;
+  }
+
+  input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+  }
+}
+
+
