@@ -15,6 +15,7 @@ require([
         plugins: {
             // This is the part that matters: Configuration for the MyAvy plugin.
             MyAvy: {
+                element: document.getElementById('myavy'),
                 enablePicker: true,
                 pickerOptions: ['a', 'b', 'c']
             }
@@ -50,4 +51,5 @@ require([
         }
     });
 
+    window.fro = fro
 });

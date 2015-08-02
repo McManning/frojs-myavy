@@ -3,10 +3,11 @@ $highlight-color: #673ab7
 $greentext-color: #789922
 $font-family: 'Arial'
 
-$primary-color: blue
+$primary-color: #4DB6AC
 
 /*** Buttons ***/
 $button-bg-color-disabled: #DFDFDF !default
+$button-bg-color-submit: #4CAF50 !default
 $button-color: $primary-color !default
 $button-color-disabled: #9F9F9F !default
 $button-color-flat: #343434 !default
@@ -20,7 +21,8 @@ $button-line-height: 36px !default
 /*** Tabs ***/
 $tabs-underline-color: $primary-color !default
 $tabs-text-color: $primary-color !default
-$tabs-bg-color: #fff !default
+$tabs-active-color: $primary-color !default
+$tabs-bg-color: transparent !default
 
 // Useful mixins from Materialize
 @import "prefixer"
@@ -28,17 +30,24 @@ $tabs-bg-color: #fff !default
 
 .myavy
     @import "globals"
-        
+
     .close
         font-size: 2em
         position: absolute
         right: 0.25em
         top: 0
+        a
+            color: #000
+            &:hover, &:active
+                color: #666
+
 
     a
         text-decoration: none
 
     position: absolute
+    left: 50%
+
     width: 400px
     font-family: $font-family
     background: #FFF
@@ -48,10 +57,16 @@ $tabs-bg-color: #fff !default
     border-radius: 3px
 
     margin: 20px
+    margin-left: -224px
     padding: 1.5em
 
     @import "form"
     @import "buttons"
+
+    button
+        font-size: 1em
+        &.btn[type=submit]
+            background-color: $button-bg-color-submit
 
     .hidden
         display: none !important
@@ -77,18 +92,18 @@ $tabs-bg-color: #fff !default
         @include transition(.2s ease)
 
         &.active
-            border-bottom: 1px solid red
-            box-shadow: 0 1px 0 0 red
+            border-bottom: 1px solid $tabs-underline-color
+            box-shadow: 0 1px 0 0 $tabs-underline-color
             
     li.tab a
-        color: green
+        color: #000
         text-decoration: none
         padding: 0.5em
 
     li.tab a:hover
-        color: red
+        color: $tabs-active-color
 
     li.tab.active
-        border-bottom: 1px solid red
+        border-bottom: 1px solid $tabs-active-color
 
 
