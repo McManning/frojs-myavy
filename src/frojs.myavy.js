@@ -199,6 +199,14 @@ define([
         this.el.className += ' myavy';
         this.el.innerHTML = html;
 
+        this.bindEvents();
+    };
+
+    /** 
+     * Add event listeners to our various components
+     */
+    Plugin.prototype.bindEvents = function() {
+
         var el = this.el;
         var tabs = el.querySelectorAll('.tab a');
         for (var t = 0; t < tabs.length; t++) {
@@ -271,6 +279,9 @@ define([
                             .removeClass('green')
                             .addClass('indeterminate')
                             .addClass('blue');*/
+                    } else {
+                        $submitButton.innerHTML = 'uploading ' + 
+                            Math.floor(percentComplete * 100) + '%';
                     }
                 }
             }, false);
@@ -317,6 +328,7 @@ define([
                 // Connection error
                 $form.reset();
                 $submitButton.innerHTML = 'upload';
+                $submitButton.removeAttribute('disabled');
                 $errorText.innerHTML = 'An unspecified error has occurred.';
             };
 
@@ -391,6 +403,7 @@ define([
                 // Connection error
                 $form.reset();
                 $submitButton.innerHTML = 'upload';
+                $submitButton.removeAttribute('disabled');
                 $errorText.innerHTML = 'An unspecified error has occurred.';
             };
 
@@ -402,13 +415,6 @@ define([
             e.preventDefault();
             return false;
         });
-
-    };
-
-    /** 
-     * Add jQuery event listeners to our various components
-     */
-    Plugin.prototype.bindEvents = function() {
 
     };
 
