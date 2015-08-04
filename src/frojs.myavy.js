@@ -20,8 +20,8 @@
 define([
     'fro'
 ], function(fro) {
+    var MYAVY_URL = 'http://localhost:5000'; //'http://myavy.net';
 
-    // Shorthand things a bit
     var Actor = fro.entities.Actor;
 
     if (typeof(Actor) !== 'function') {
@@ -49,7 +49,7 @@ define([
         this.el = options.element || null;
         this.enableUploads = options.enableUploads || true;
         this.enableUrls = options.enableUrls || true;
-        this.enablePicker = options.enablePicker || false;
+        this.enablePicker = false; // options.enablePicker || false;
         this.pickerOptions = options.pickerOptions || [];
 
         // Ensure that there's picker options specified
@@ -121,16 +121,17 @@ define([
 
         var html = 
             '<div class="page myavy-uploader hidden">' +
-                '<form>' +
+                '<form action="#">' +
                     '<div class="file-field input-field">' +
                         '<div class="btn">' +
                             '<span>File</span>' +
-                            '<input type="file" />' +
+                            '<input name="avatar2" type="file" />' +
                         '</div>' +
                         '<div class="file-path-wrapper">' +
                             '<input class="file-path" type="text">' +
                         '</div>' +
                     '</div>' +
+                    '<div class="error-response"></div>' +
                     '<button class="btn" type="submit">upload</button>' +
                 '</form>' +
             '</div>';                    
@@ -142,9 +143,9 @@ define([
 
         var html = 
             '<div class="page myavy-url">' +
-                '<form>' +
+                '<form action="#">' +
                     '<input name="upload" placeholder="Enter a MyAvy avatar url" type="text" />' +
-                    '<div class="upload-response"></div>' +
+                    '<div class="error-response"></div>' +
                     '<button class="btn" type="submit">upload</button>' +
                 '</form>' +
             '</div>';
@@ -223,13 +224,185 @@ define([
             });
         }
 
-        el.querySelector('input[type="file"]').addEventListener('change', function(e) {
+        el.querySelector('input[type="file"]')
+            .addEventListener('change', function(e) {
+
             var output = el.querySelector('.file-path');
             if (this.files.length > 0) {
                 output.value = this.files[0].name;
             } else {
                 output.value = '';
             }
+        });
+
+        el.querySelector('.myavy-uploader form')
+            .addEventListener('submit', function(e) {
+
+            var $form = this;
+            var formData = new FormData();
+
+            var avatar = $form.querySelector('input[type="file"]').files[0];
+            formData.append('avatar', avatar);
+
+            var $submitButton = $form.querySelector('button[type="submit"]');
+            var $errorText = $form.querySelector('.error-response');
+            
+            $errorText.innerHTML = '';
+
+            var xhr = new window.XMLHttpRequest();
+            xhr.open('POST', MYAVY_URL, true);
+
+            //Upload progress
+            xhr.upload.addEventListener("progress", function(evt) {
+                if (evt.lengthComputable) {
+                    var percentComplete = evt.loaded / evt.total;
+                    console.log(evt.loaded + ' / ' + evt.total + ' = ' + percentComplete);
+
+                    // Update progress bar
+                    /*$progress.setAttribute(
+                        'style', 'width: ' + (percentComplete * 100) + '%'
+                    );*/
+
+                    // If upload is done, change our status from 'uploading' to 'processing'
+                    if (percentComplete === 1) {
+                        $submitButton.innerHTML = 'converting';
+                        /*$progress
+                            .removeClass('determinate')
+                            .removeClass('green')
+                            .addClass('indeterminate')
+                            .addClass('blue');*/
+                    }
+                }
+            }, false);
+
+            xhr.onload = function() {
+                if (xhr.status >= 200 && xhr.status < 400) {
+                    try {
+                        json = JSON.parse(xhr.responseText);
+                    } catch (e) {
+                        json = false;
+                    }
+
+                    if (json) {
+                        console.log(json);
+                        alert('do a thing!');
+                    } else {
+                        $errorText.innerHTML = 'Received an invalid response from the server';
+                    }
+
+                } else {
+                    // Reached target, but there's some error
+
+                    console.log(xhr.responseText);
+
+                    var json;
+                    try {
+                        json = JSON.parse(xhr.responseText);
+                    } catch (e) {
+                        json = false;
+                    }
+
+                    if (json && json.code) {
+                        $errorText.innerHTML = json.message;
+                    } else {
+                        $errorText.innerHTML = 'Received an invalid response from the server';
+                    }
+                }
+
+                // Either way, reset our uploader form
+                //$('#upload-progress').addClass('hide');
+                $form.reset();
+                $submitButton.innerHTML = 'upload';
+            };
+
+            xhr.onerror = function() {
+                // Connection error
+                $form.reset();
+                $submitButton.innerHTML = 'upload';
+                $errorText.innerHTML = 'An unspecified error has occurred.';
+            };
+
+            xhr.send(formData);
+
+            $submitButton.innerHTML = 'uploading';
+
+            e.preventDefault();
+            return false;
+        });
+
+        el.querySelector('.myavy-url form')
+            .addEventListener('submit', function(e) {
+
+            var $form = this;
+            var url = $form.querySelector('input[type="text"]').value;
+            
+            var $submitButton = $form.querySelector('button[type="submit"]');
+            var $errorText = $form.querySelector('.error-response');
+            
+            $errorText.innerHTML = '';
+
+            if (url.length < 1) {
+                $errorText.innerHTML = 'You must enter a URL!';
+                return;
+            }
+
+            var xhr = new window.XMLHttpRequest();
+            xhr.open('GET', url, true);
+
+            xhr.onload = function() {
+                if (xhr.status >= 200 && xhr.status < 400) {
+                    var json;
+                    try {
+                        json = JSON.parse(xhr.responseText);
+                    } catch (e) {
+                        json = false;
+                    }
+
+                    if (json) {
+                        console.log(json);
+                        alert('do a thing!');
+                    } else {
+                        $errorText.innerHTML = 'Received an invalid response from the server';
+                    }
+
+                } else {
+                    // Reached target, but there's some error
+
+                    console.log(xhr.responseText);
+
+                    var json;
+                    try {
+                        json = JSON.parse(xhr.responseText);
+                    } catch (e) {
+                        json = false;
+                    }
+
+                    if (json && json.code) {
+                        $errorText.innerHTML = json.message;
+                    } else {
+                        $errorText.innerHTML = 'Received an invalid response from the server';
+                    }
+                }
+
+                // Either way, reset our uploader form
+                //$('#upload-progress').addClass('hide');
+                $form.reset();
+                $submitButton.innerHTML = 'upload';
+            };
+
+            xhr.onerror = function() {
+                // Connection error
+                $form.reset();
+                $submitButton.innerHTML = 'upload';
+                $errorText.innerHTML = 'An unspecified error has occurred.';
+            };
+
+            xhr.send();
+
+            $submitButton.innerHTML = 'uploading';
+
+            e.preventDefault();
+            return false;
         });
 
     };
