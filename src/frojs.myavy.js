@@ -292,9 +292,6 @@ define([
 
                 } else {
                     // Reached target, but there's some error
-
-                    console.log(xhr.responseText);
-
                     var json;
                     try {
                         json = JSON.parse(xhr.responseText);
@@ -313,6 +310,7 @@ define([
                 //$('#upload-progress').addClass('hide');
                 $form.reset();
                 $submitButton.innerHTML = 'upload';
+                $submitButton.removeAttribute('disabled');
             };
 
             xhr.onerror = function() {
@@ -325,6 +323,7 @@ define([
             xhr.send(formData);
 
             $submitButton.innerHTML = 'uploading';
+            $submitButton.setAttribute('disabled', 'disabled');
 
             e.preventDefault();
             return false;
@@ -367,9 +366,6 @@ define([
 
                 } else {
                     // Reached target, but there's some error
-
-                    console.log(xhr.responseText);
-
                     var json;
                     try {
                         json = JSON.parse(xhr.responseText);
@@ -388,6 +384,7 @@ define([
                 //$('#upload-progress').addClass('hide');
                 $form.reset();
                 $submitButton.innerHTML = 'upload';
+                $submitButton.removeAttribute('disabled');
             };
 
             xhr.onerror = function() {
@@ -400,6 +397,7 @@ define([
             xhr.send();
 
             $submitButton.innerHTML = 'uploading';
+            $submitButton.setAttribute('disabled', 'disabled');
 
             e.preventDefault();
             return false;
